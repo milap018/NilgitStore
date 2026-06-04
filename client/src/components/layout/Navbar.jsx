@@ -28,6 +28,12 @@ export default function Navbar() {
       <NavLink to="/products" className={linkClass} onClick={() => setOpen(false)}>
         Products
       </NavLink>
+      <NavLink to="/about" className={linkClass} onClick={() => setOpen(false)}>
+        About
+      </NavLink>
+      <NavLink to="/contact" className={linkClass} onClick={() => setOpen(false)}>
+        Contact
+      </NavLink>
       {user && (
         <NavLink to="/orders" className={linkClass} onClick={() => setOpen(false)}>
           Orders

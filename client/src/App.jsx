@@ -5,13 +5,17 @@ import AddProduct from "./pages/admin/AddProduct.jsx";
 import EditProduct from "./pages/admin/EditProduct.jsx";
 import Signin from "./pages/auth/Signin.jsx";
 import Signup from "./pages/auth/Signup.jsx";
+import About from "./pages/shop/About.jsx";
 import Cart from "./pages/shop/Cart.jsx";
+import Contact from "./pages/shop/Contact.jsx";
 import Checkout from "./pages/shop/Checkout.jsx";
 import Home from "./pages/shop/Home.jsx";
 import OrderSuccess from "./pages/shop/OrderSuccess.jsx";
 import Orders from "./pages/shop/Orders.jsx";
+import Privacy from "./pages/shop/Privacy.jsx";
 import ProductDetails from "./pages/shop/ProductDetails.jsx";
 import Products from "./pages/shop/Products.jsx";
+import Terms from "./pages/shop/Terms.jsx";
 import AdminRoute from "./routes/AdminRoute.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
@@ -31,6 +35,10 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />

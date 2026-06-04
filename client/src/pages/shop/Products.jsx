@@ -1,5 +1,6 @@
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import ErrorMessage from "../../components/common/ErrorMessage.jsx";
 import Loader from "../../components/common/Loader.jsx";
 import ProductCard from "../../components/product/ProductCard.jsx";
@@ -10,10 +11,11 @@ import { CATEGORY_OPTIONS, getSubcategories } from "../../utils/categoryData.js"
 export default function Products() {
   usePageTitle("Products");
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
+  const [category, setCategory] = useState(searchParams.get("category") || "");
+  const [subcategory, setSubcategory] = useState(searchParams.get("subcategory") || "");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -37,8 +39,19 @@ export default function Products() {
   }, [search, category, subcategory]);
 
   function handleCategoryChange(event) {
-    setCategory(event.target.value);
+    const nextCategory = event.target.value;
+    setCategory(nextCategory);
     setSubcategory("");
+    setSearchParams(nextCategory ? { category: nextCategory } : {});
+  }
+
+  function handleSubcategoryChange(event) {
+    const nextSubcategory = event.target.value;
+    setSubcategory(nextSubcategory);
+    setSearchParams({
+      ...(category ? { category } : {}),
+      ...(nextSubcategory ? { subcategory: nextSubcategory } : {})
+    });
   }
 
   return (
@@ -73,7 +86,7 @@ export default function Products() {
           <select
             className="rounded-md border border-neutral-300 bg-white px-3 py-2 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft disabled:bg-neutral-100"
             value={subcategory}
-            onChange={(event) => setSubcategory(event.target.value)}
+            onChange={handleSubcategoryChange}
             disabled={!category}
           >
             <option value="">All subcategories</option>

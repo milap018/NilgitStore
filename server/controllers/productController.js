@@ -1,5 +1,21 @@
 import mongoose from "mongoose";
 import Product from "../models/Product.js";
+import { products as fallbackProducts } from "../seed/seedData.js";
+
+function getFallbackProducts({ search = "", category = "", subcategory = "" }) {
+  const searchText = search.toLowerCase();
+
+  return fallbackProducts.filter((product) => {
+    const matchesSearch =
+      !searchText ||
+      product.name.toLowerCase().includes(searchText) ||
+      product.brand.toLowerCase().includes(searchText);
+    const matchesCategory = !category || product.category === category;
+    const matchesSubcategory = !subcategory || product.subcategory === subcategory;
+
+    return matchesSearch && matchesCategory && matchesSubcategory;
+  });
+}
 
 function cleanStringArray(value) {
   if (!Array.isArray(value)) {
@@ -50,6 +66,10 @@ export async function getProducts(req, res) {
     const category = req.query.category || "";
     const subcategory = req.query.subcategory || "";
 
+    if (req.dbError) {
+      return res.json(getFallbackProducts({ search, category, subcategory }));
+    }
+
     const filter = {};
 
     if (search) {
@@ -78,6 +98,16 @@ export async function getProductById(req, res) {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid product id." });
+    }
+
+    if (req.dbError) {
+      const product = fallbackProducts.find((item) => item._id === req.params.id);
+
+      if (!product) {
+        return res.status(404).json({ message: "Product not found." });
+      }
+
+      return res.json(product);
     }
 
     const product = await Product.findById(req.params.id);

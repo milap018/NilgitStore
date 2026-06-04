@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
 import { connectDb } from "../config/db.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
@@ -236,16 +237,20 @@ function buildProducts() {
       const discountPercentage = [10, 15, 20, 25, 30, 35, 40, 45, 18, 22][index];
       const stockQuantity = index === 9 ? 0 : index % 4 === 0 ? 3 : 8 + index;
       const originalPrice = group.basePrice + index * Math.round(group.basePrice * 0.18);
+      const sellingPrice = Math.round((originalPrice - originalPrice * (discountPercentage / 100)) * 100) / 100;
       const subcategory = group.subcategories[index % group.subcategories.length];
       const brand = group.brands[index % group.brands.length];
+      const productNumber = categoryCatalog.indexOf(group) * 10 + index + 1;
 
       return {
+        _id: productNumber.toString(16).padStart(24, "0"),
         name,
         brand,
         category: group.category,
         subcategory,
         description: `${name} from ${brand} is a practical ${group.category.toLowerCase()} product for everyday shopping needs.`,
         originalPrice,
+        sellingPrice,
         discountPercentage,
         stockQuantity,
         images: group.images,
@@ -266,13 +271,14 @@ function buildProducts() {
         deliveryInfo: index % 3 === 0 ? "Free delivery in 2-4 days" : "Delivery within 3-6 days",
         returnPolicy: index % 2 === 0 ? "7 days replacement policy" : "10 days return policy",
         sellerName: `${brand} Authorized Seller`,
+        status: stockQuantity > 0 ? "in stock" : "out of stock",
         featured: index < 2
       };
     })
   );
 }
 
-const products = buildProducts();
+export const products = buildProducts();
 
 async function seed() {
   try {
@@ -303,4 +309,6 @@ async function seed() {
   }
 }
 
-seed();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  seed();
+}

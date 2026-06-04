@@ -95,6 +95,33 @@ The built frontend runs at:
 http://localhost:5173
 ```
 
+## Vercel Deployment
+
+Deploy this repository from the project root, not from the `client` folder only. The root `vercel.json` builds the React app from `client` and also exposes the Express API through `/api`.
+
+Production frontend API behavior:
+
+```text
+https://your-vercel-domain.vercel.app/api
+```
+
+If `VITE_API_URL` is not set, the production frontend automatically uses `/api`. Do not set `VITE_API_URL` to `http://localhost:5000/api` in Vercel, because browser users cannot reach your local computer.
+
+For real database products in production, add these Vercel environment variables:
+
+```text
+MONGO_URI
+JWT_SECRET
+JWT_EXPIRES_IN
+CLIENT_URL
+STRIPE_SECRET_KEY
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+```
+
+Until `MONGO_URI` is configured, the deployed product API returns the seeded demo catalog so the products page does not stay blank.
+
 ## Seed Sample Products
 
 After setting `server/.env`, run:

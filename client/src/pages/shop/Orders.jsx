@@ -37,18 +37,18 @@ export default function Orders() {
       <div className="mt-6">
         <ErrorMessage message={error} />
         {orders.length === 0 ? (
-          <p className="rounded-md border border-neutral-200 bg-white p-6 text-neutral-600">No orders yet.</p>
+          <p className="rounded-md border border-gold-100 bg-white p-6 text-neutral-600">No orders yet.</p>
         ) : (
           <div className="space-y-4">
             {orders.map((order) => (
-              <article key={order._id} className="rounded-md border border-neutral-200 bg-white p-5 shadow-soft">
+              <article key={order._id} className="rounded-md border border-gold-100 bg-white p-5 shadow-soft">
                 <div className="flex flex-col justify-between gap-2 sm:flex-row">
                   <div>
                     <h2 className="font-semibold">Order {order._id}</h2>
                     <p className="text-sm text-neutral-600">{new Date(order.createdAt).toLocaleString()}</p>
                   </div>
                   <div className="text-sm">
-                    <span className={order.isPaid ? "font-semibold text-leaf" : "font-semibold text-clay"}>
+                    <span className={order.isPaid ? "font-semibold text-gold-700" : "font-semibold text-gold-600"}>
                       {order.isPaid ? "Paid" : "Not paid"}
                     </span>
                     <span className="ml-4 font-semibold">{formatMoney(order.totalAmount)}</span>

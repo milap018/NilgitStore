@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import PageShell from "./components/layout/PageShell.jsx";
 import AdminProducts from "./pages/admin/AdminProducts.jsx";
 import AddProduct from "./pages/admin/AddProduct.jsx";
@@ -11,17 +11,18 @@ import Contact from "./pages/shop/Contact.jsx";
 import Checkout from "./pages/shop/Checkout.jsx";
 import Home from "./pages/shop/Home.jsx";
 import OrderSuccess from "./pages/shop/OrderSuccess.jsx";
-import Orders from "./pages/shop/Orders.jsx";
 import Privacy from "./pages/shop/Privacy.jsx";
+import Profile from "./pages/shop/Profile.jsx";
 import ProductDetails from "./pages/shop/ProductDetails.jsx";
 import Products from "./pages/shop/Products.jsx";
 import Terms from "./pages/shop/Terms.jsx";
+import Wishlist from "./pages/shop/Wishlist.jsx";
 import AdminRoute from "./routes/AdminRoute.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
 function NotFound() {
   return (
-    <section className="rounded-md border border-neutral-200 bg-white p-8 text-center shadow-soft">
+    <section className="rounded-md border border-gold-100 bg-white p-8 text-center shadow-soft">
       <h1 className="text-3xl font-bold">Page not found</h1>
       <p className="mt-2 text-neutral-600">Check the route in the address bar.</p>
     </section>
@@ -42,11 +43,13 @@ export default function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<Wishlist />} />
 
         <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<Profile />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
-          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders" element={<Navigate to="/profile?tab=orders" replace />} />
         </Route>
 
         <Route element={<AdminRoute />}>

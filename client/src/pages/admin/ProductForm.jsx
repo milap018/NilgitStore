@@ -96,7 +96,7 @@ export default function ProductForm({ initialValues, onSubmit, submitLabel }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-md border border-neutral-200 bg-white p-5 shadow-soft">
+    <form onSubmit={handleSubmit} className="space-y-4 rounded-md border border-gold-100 bg-white p-5 shadow-soft">
       <ErrorMessage message={error} />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input id="name" label="Product name" name="name" value={form.name} onChange={handleChange} required />
@@ -106,7 +106,7 @@ export default function ProductForm({ initialValues, onSubmit, submitLabel }) {
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-neutral-700">Category</span>
           <select
-            className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft"
+            className="w-full rounded-md border border-gold-200 bg-white px-3 py-2 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-100"
             name="category"
             value={form.category}
             onChange={handleCategoryChange}
@@ -123,7 +123,7 @@ export default function ProductForm({ initialValues, onSubmit, submitLabel }) {
         <label className="block">
           <span className="mb-1 block text-sm font-medium text-neutral-700">Subcategory</span>
           <select
-            className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft disabled:bg-neutral-100"
+            className="w-full rounded-md border border-gold-200 bg-white px-3 py-2 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-100 disabled:bg-neutral-100"
             name="subcategory"
             value={form.subcategory}
             onChange={handleChange}
@@ -142,7 +142,7 @@ export default function ProductForm({ initialValues, onSubmit, submitLabel }) {
       <label className="block">
         <span className="mb-1 block text-sm font-medium text-neutral-700">Description</span>
         <textarea
-          className="min-h-28 w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft"
+          className="min-h-28 w-full rounded-md border border-gold-200 px-3 py-2 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-100"
           name="description"
           value={form.description}
           onChange={handleChange}
@@ -161,7 +161,7 @@ export default function ProductForm({ initialValues, onSubmit, submitLabel }) {
       </div>
       <label className="block">
         <span className="mb-1 block text-sm font-medium text-neutral-700">Upload product images</span>
-        <input className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2" type="file" accept="image/*" multiple onChange={handleImageChange} />
+        <input className="w-full rounded-md border border-gold-200 bg-white px-3 py-2" type="file" accept="image/*" multiple onChange={handleImageChange} />
       </label>
       {uploading && <p className="text-sm text-neutral-600">Uploading image...</p>}
       {form.images.length > 0 && (
@@ -184,7 +184,7 @@ export default function ProductForm({ initialValues, onSubmit, submitLabel }) {
       <label className="block">
         <span className="mb-1 block text-sm font-medium text-neutral-700">Product highlights</span>
         <textarea
-          className="min-h-28 w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft"
+          className="min-h-28 w-full rounded-md border border-gold-200 px-3 py-2 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-100"
           name="highlightsText"
           value={form.highlightsText}
           onChange={handleChange}
@@ -194,7 +194,7 @@ export default function ProductForm({ initialValues, onSubmit, submitLabel }) {
       <label className="block">
         <span className="mb-1 block text-sm font-medium text-neutral-700">Specifications</span>
         <textarea
-          className="min-h-28 w-full rounded-md border border-neutral-300 px-3 py-2 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft"
+          className="min-h-28 w-full rounded-md border border-gold-200 px-3 py-2 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-100"
           name="specificationsText"
           value={form.specificationsText}
           onChange={handleChange}

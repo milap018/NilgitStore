@@ -6,14 +6,14 @@ export default function Privacy() {
   return (
     <section className="mx-auto max-w-4xl space-y-6">
       <div>
-        <p className="text-sm font-semibold uppercase tracking-normal text-clay">Privacy Policy</p>
+        <p className="text-sm font-semibold uppercase tracking-normal text-gold-700">Privacy Policy</p>
         <h1 className="mt-2 text-4xl font-bold">How Nilgit Store handles learning project data</h1>
         <p className="mt-3 text-neutral-600">
           This project is built for practice. Use test keys and avoid entering sensitive real customer data.
         </p>
       </div>
 
-      <div className="space-y-5 rounded-md border border-neutral-200 bg-white p-6 shadow-soft">
+      <div className="space-y-5 rounded-md border border-gold-100 bg-white p-6 shadow-soft">
         <article>
           <h2 className="text-xl font-bold">Information collected</h2>
           <p className="mt-2 text-neutral-600">

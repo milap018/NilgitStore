@@ -21,6 +21,7 @@ export function CartProvider({ children }) {
 
   const addToCart = useCallback(function addToCart(product, quantity = 1) {
     setCartItems((oldItems) => {
+      const productId = product._id ?? product.product;
       const stockQuantity = getStockQuantity(product);
       const safeQuantity = Math.max(1, Math.min(Number(quantity) || 1, stockQuantity));
 
@@ -28,11 +29,11 @@ export function CartProvider({ children }) {
         return oldItems;
       }
 
-      const existingItem = oldItems.find((item) => item.product === product._id);
+      const existingItem = oldItems.find((item) => item.product === productId);
 
       if (existingItem) {
         return oldItems.map((item) =>
-          item.product === product._id
+          item.product === productId
             ? { ...item, quantity: Math.min(item.quantity + safeQuantity, stockQuantity), stockQuantity }
             : item
         );
@@ -41,7 +42,7 @@ export function CartProvider({ children }) {
       return [
         ...oldItems,
         {
-          product: product._id,
+          product: productId,
           name: product.name,
           brand: product.brand,
           image: getPrimaryImage(product),
@@ -64,11 +65,15 @@ export function CartProvider({ children }) {
     const safeQuantity = Number(quantity) || 1;
 
     setCartItems((oldItems) =>
-      oldItems.map((item) =>
-        item.product === productId
-          ? { ...item, quantity: Math.max(1, Math.min(safeQuantity, item.stockQuantity ?? item.countInStock)) }
-          : item
-      )
+      oldItems.map((item) => {
+        if (item.product !== productId) {
+          return item;
+        }
+
+        const maxQuantity = item.stockQuantity ?? item.countInStock ?? safeQuantity;
+
+        return { ...item, quantity: Math.max(1, Math.min(safeQuantity, maxQuantity)) };
+      })
     );
   }, []);
 

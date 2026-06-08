@@ -6,14 +6,14 @@ export default function Terms() {
   return (
     <section className="mx-auto max-w-4xl space-y-6">
       <div>
-        <p className="text-sm font-semibold uppercase tracking-normal text-clay">Terms & Conditions</p>
+        <p className="text-sm font-semibold uppercase tracking-normal text-gold-700">Terms & Conditions</p>
         <h1 className="mt-2 text-4xl font-bold">Simple terms for using this learning store</h1>
         <p className="mt-3 text-neutral-600">
           Nilgit Store is a practice project, not a real commercial marketplace.
         </p>
       </div>
 
-      <div className="space-y-5 rounded-md border border-neutral-200 bg-white p-6 shadow-soft">
+      <div className="space-y-5 rounded-md border border-gold-100 bg-white p-6 shadow-soft">
         <article>
           <h2 className="text-xl font-bold">Demo products</h2>
           <p className="mt-2 text-neutral-600">

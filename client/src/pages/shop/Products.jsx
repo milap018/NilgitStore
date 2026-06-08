@@ -65,14 +65,14 @@ export default function Products() {
           <label className="relative block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" size={18} />
             <input
-              className="w-full rounded-md border border-neutral-300 bg-white py-2 pl-10 pr-3 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft"
+              className="w-full rounded-md border border-gold-200 bg-white py-2 pl-10 pr-3 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-100"
               placeholder="Search products"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
             />
           </label>
           <select
-            className="rounded-md border border-neutral-300 bg-white px-3 py-2 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft"
+            className="rounded-md border border-gold-200 bg-white px-3 py-2 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-100"
             value={category}
             onChange={handleCategoryChange}
           >
@@ -84,7 +84,7 @@ export default function Products() {
             ))}
           </select>
           <select
-            className="rounded-md border border-neutral-300 bg-white px-3 py-2 outline-none focus:border-ink focus:ring-2 focus:ring-skysoft disabled:bg-neutral-100"
+            className="rounded-md border border-gold-200 bg-white px-3 py-2 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-100 disabled:bg-neutral-100"
             value={subcategory}
             onChange={handleSubcategoryChange}
             disabled={!category}
@@ -104,7 +104,7 @@ export default function Products() {
         {loading ? (
           <Loader label="Loading products..." />
         ) : products.length === 0 ? (
-          <p className="rounded-md border border-neutral-200 bg-white p-6 text-neutral-600">No products found.</p>
+          <p className="rounded-md border border-gold-100 bg-white p-6 text-neutral-600">No products found.</p>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {products.map((product) => (

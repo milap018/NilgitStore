@@ -36,7 +36,7 @@ export default function Signin() {
   }
 
   return (
-    <section className="mx-auto max-w-md rounded-md border border-neutral-200 bg-white p-6 shadow-soft">
+    <section className="mx-auto max-w-md rounded-md border border-gold-100 bg-white p-6 shadow-soft">
       <h1 className="text-2xl font-bold">Welcome back</h1>
       <p className="mt-2 text-sm text-neutral-600">Use the seeded admin account or create a new customer account.</p>
 
@@ -59,7 +59,7 @@ export default function Signin() {
 
       <p className="mt-4 text-center text-sm text-neutral-600">
         New here?{" "}
-        <Link className="font-semibold text-ink" to="/signup">
+        <Link className="font-semibold text-gold-700" to="/signup">
           Signup
         </Link>
       </p>

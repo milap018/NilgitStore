@@ -53,7 +53,7 @@ export default function Checkout() {
 
   if (cartItems.length === 0) {
     return (
-      <section className="rounded-md border border-neutral-200 bg-white p-8 text-center shadow-soft">
+      <section className="rounded-md border border-gold-100 bg-white p-8 text-center shadow-soft">
         <h1 className="text-2xl font-bold">Cart is empty</h1>
         <p className="mt-2 text-neutral-600">You need products before checkout.</p>
         <Link to="/products" className="mt-5 inline-block">
@@ -67,7 +67,7 @@ export default function Checkout() {
     <section>
       <h1 className="text-3xl font-bold">Checkout</h1>
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
-        <form onSubmit={handleSubmit} className="space-y-4 rounded-md border border-neutral-200 bg-white p-5 shadow-soft">
+        <form onSubmit={handleSubmit} className="space-y-4 rounded-md border border-gold-100 bg-white p-5 shadow-soft">
           <ErrorMessage message={error} />
           <Input id="fullName" label="Full name" name="fullName" value={form.fullName} onChange={handleChange} required />
           <Input id="address" label="Address" name="address" value={form.address} onChange={handleChange} required />
@@ -81,7 +81,7 @@ export default function Checkout() {
           </Button>
         </form>
 
-        <aside className="h-fit rounded-md border border-neutral-200 bg-white p-5 shadow-soft">
+        <aside className="h-fit rounded-md border border-gold-100 bg-white p-5 shadow-soft">
           <h2 className="text-xl font-bold">Order summary</h2>
           <div className="mt-4 space-y-3">
             {cartItems.map((item) => (
@@ -91,7 +91,7 @@ export default function Checkout() {
               </div>
             ))}
           </div>
-          <div className="mt-4 flex justify-between border-t border-neutral-200 pt-4">
+          <div className="mt-4 flex justify-between border-t border-gold-100 pt-4">
             <span>Total</span>
             <strong>{formatMoney(cartTotal)}</strong>
           </div>

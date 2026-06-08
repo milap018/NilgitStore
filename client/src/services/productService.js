@@ -1,13 +1,32 @@
 import api from "./api.js";
+import { getDemoProduct, getDemoProducts } from "../utils/demoProducts.js";
 
 export async function getProducts(params = {}) {
-  const { data } = await api.get("/products", { params });
-  return data;
+  try {
+    const { data } = await api.get("/products", { params });
+    return data;
+  } catch (error) {
+    if (import.meta.env.PROD) {
+      return getDemoProducts(params);
+    }
+
+    throw error;
+  }
 }
 
 export async function getProduct(id) {
-  const { data } = await api.get(`/products/${id}`);
-  return data;
+  try {
+    const { data } = await api.get(`/products/${id}`);
+    return data;
+  } catch (error) {
+    const product = import.meta.env.PROD ? getDemoProduct(id) : null;
+
+    if (product) {
+      return product;
+    }
+
+    throw error;
+  }
 }
 
 export async function createProduct(form) {

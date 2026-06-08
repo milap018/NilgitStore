@@ -67,9 +67,9 @@ export default function AdminProducts() {
 
       <div className="mt-6">
         <ErrorMessage message={error} />
-        <div className="overflow-x-auto rounded-md border border-neutral-200 bg-white shadow-soft">
-          <table className="min-w-full divide-y divide-neutral-200 text-sm">
-            <thead className="bg-neutral-50 text-left">
+        <div className="overflow-x-auto rounded-md border border-gold-100 bg-white shadow-soft">
+          <table className="min-w-full divide-y divide-gold-100 text-sm">
+            <thead className="bg-gold-50 text-left">
               <tr>
                 <th className="px-4 py-3">Product</th>
                 <th className="px-4 py-3">Brand</th>
@@ -79,7 +79,7 @@ export default function AdminProducts() {
                 <th className="px-4 py-3">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-200">
+            <tbody className="divide-y divide-gold-100">
               {products.map((product) => (
                 <tr key={product._id}>
                   <td className="px-4 py-3">
@@ -96,14 +96,14 @@ export default function AdminProducts() {
                     <div className="flex gap-2">
                       <Link
                         to={`/admin/products/${product._id}/edit`}
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-neutral-300"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gold-200 transition hover:border-gold-500 hover:bg-gold-50"
                         aria-label={`Edit ${product.name}`}
                       >
                         <Edit size={18} />
                       </Link>
                       <button
                         type="button"
-                        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-neutral-300 text-red-600"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gold-200 text-red-600 transition hover:border-red-300 hover:bg-red-50"
                         onClick={() => handleDelete(product._id)}
                         aria-label={`Delete ${product.name}`}
                       >

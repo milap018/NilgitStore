@@ -59,25 +59,25 @@ export default function Home() {
 
   return (
     <div className="space-y-10 pb-8">
-      <section className="relative overflow-hidden rounded-md bg-ink text-white shadow-soft">
+      <section className="relative overflow-hidden rounded-md border border-gold-200 bg-gradient-to-br from-white via-gold-50 to-gold-200 text-ink shadow-soft">
         <img
-          className="absolute inset-0 h-full w-full object-cover opacity-45"
+          className="absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-multiply"
           src="https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1600&q=80"
           alt="Online shopping collection"
         />
         <div className="relative grid min-h-[430px] content-end gap-6 p-6 sm:p-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
           <div className="max-w-2xl space-y-5">
-            <p className="text-sm font-semibold uppercase tracking-normal text-skysoft">Nilgit Store</p>
+            <p className="text-sm font-semibold uppercase tracking-normal text-gold-700">Nilgit Store</p>
             <h1 className="text-4xl font-bold leading-tight sm:text-6xl">Fresh picks for every shelf, screen, and closet.</h1>
-            <p className="max-w-xl text-base text-neutral-100 sm:text-lg">
+            <p className="max-w-xl text-base text-neutral-700 sm:text-lg">
               Shop phones, electronics, fashion, appliances, groceries, books, toys, and home essentials from one simple store.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/products">
-                <Button className="bg-white text-ink hover:bg-neutral-100">Shop all products</Button>
+                <Button>Shop all products</Button>
               </Link>
               <Link to="/products?category=Mobiles">
-                <Button variant="secondary" className="border-white bg-transparent text-white hover:border-white">
+                <Button variant="secondary">
                   Explore mobiles
                 </Button>
               </Link>
@@ -85,15 +85,15 @@ export default function Home() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-            <div className="rounded-md bg-white/95 p-4 text-ink">
+            <div className="rounded-md border border-gold-200 bg-white/95 p-4 text-ink">
               <p className="text-3xl font-bold">100+</p>
               <p className="text-sm text-neutral-600">Products across 10 categories</p>
             </div>
-            <div className="rounded-md bg-white/95 p-4 text-ink">
+            <div className="rounded-md border border-gold-200 bg-white/95 p-4 text-ink">
               <p className="text-3xl font-bold">45%</p>
               <p className="text-sm text-neutral-600">Deals on selected picks</p>
             </div>
-            <div className="rounded-md bg-white/95 p-4 text-ink">
+            <div className="rounded-md border border-gold-200 bg-white/95 p-4 text-ink">
               <p className="text-3xl font-bold">10</p>
               <p className="text-sm text-neutral-600">Departments to explore</p>
             </div>
@@ -107,7 +107,7 @@ export default function Home() {
             <h2 className="text-2xl font-bold">Shop by category</h2>
             <p className="mt-1 text-sm text-neutral-600">Start with a department and narrow down from there.</p>
           </div>
-          <Link to="/products" className="hidden items-center gap-1 text-sm font-semibold text-ink sm:inline-flex">
+          <Link to="/products" className="hidden items-center gap-1 text-sm font-semibold text-gold-700 sm:inline-flex">
             View all <ArrowRight size={16} />
           </Link>
         </div>
@@ -116,7 +116,7 @@ export default function Home() {
             <Link
               key={category.name}
               to={`/products?category=${encodeURIComponent(category.name)}`}
-              className="group overflow-hidden rounded-md border border-neutral-200 bg-white shadow-soft"
+              className="group overflow-hidden rounded-md border border-gold-100 bg-white shadow-soft transition hover:-translate-y-1 hover:border-gold-300"
             >
               <img className="h-32 w-full object-cover transition duration-300 group-hover:scale-105" src={categoryImages[category.name]} alt={category.name} />
               <div className="p-4">
@@ -128,10 +128,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="rounded-md bg-skysoft p-5 sm:p-7">
+      <section className="rounded-md border border-gold-200 bg-skysoft p-5 sm:p-7">
         <div className="grid gap-5 lg:grid-cols-[1fr_1.4fr] lg:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-clay">Seasonal deals</p>
+            <p className="text-sm font-semibold uppercase tracking-normal text-gold-700">Seasonal deals</p>
             <h2 className="mt-2 text-3xl font-bold">Discounts without digging through pages.</h2>
             <p className="mt-2 text-neutral-700">
               Fresh markdowns from across the store, gathered in one quick row.
@@ -139,10 +139,10 @@ export default function Home() {
           </div>
           <div className="grid gap-3 sm:grid-cols-4">
             {topDeals.slice(0, 4).map((product) => (
-              <Link key={product._id} to={`/products/${product._id}`} className="rounded-md bg-white p-4 shadow-soft">
-                <p className="text-xs font-semibold uppercase tracking-normal text-clay">{product.brand}</p>
+              <Link key={product._id} to={`/products/${product._id}`} className="rounded-md border border-gold-100 bg-white p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-gold-300">
+                <p className="text-xs font-semibold uppercase tracking-normal text-gold-700">{product.brand}</p>
                 <h3 className="mt-1 line-clamp-2 min-h-10 font-semibold">{product.name}</h3>
-                <p className="mt-3 text-lg font-bold text-leaf">{product.discountPercentage}% off</p>
+                <p className="mt-3 text-lg font-bold text-gold-700">{product.discountPercentage}% off</p>
               </Link>
             ))}
           </div>
@@ -155,7 +155,7 @@ export default function Home() {
             <h2 className="text-2xl font-bold">Featured picks</h2>
             <p className="mt-1 text-sm text-neutral-600">Popular choices for fast browsing.</p>
           </div>
-          <Link to="/products" className="hidden items-center gap-1 text-sm font-semibold text-ink sm:inline-flex">
+          <Link to="/products" className="hidden items-center gap-1 text-sm font-semibold text-gold-700 sm:inline-flex">
             Shop more <ArrowRight size={16} />
           </Link>
         </div>
@@ -178,8 +178,8 @@ export default function Home() {
           const Icon = item.icon;
 
           return (
-            <div key={item.title} className="rounded-md border border-neutral-200 bg-white p-5 shadow-soft">
-              <Icon className="text-clay" size={28} />
+            <div key={item.title} className="rounded-md border border-gold-100 bg-white p-5 shadow-soft">
+              <Icon className="text-gold-700" size={28} />
               <h3 className="mt-3 font-semibold">{item.title}</h3>
               <p className="mt-1 text-sm text-neutral-600">{item.text}</p>
             </div>

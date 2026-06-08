@@ -47,7 +47,7 @@ export default function OrderSuccess() {
   }
 
   return (
-    <section className="rounded-md border border-neutral-200 bg-white p-8 text-center shadow-soft">
+    <section className="rounded-md border border-gold-100 bg-white p-8 text-center shadow-soft">
       <h1 className="text-3xl font-bold">Order paid successfully</h1>
       <p className="mt-2 text-neutral-600">Stripe test payment was verified by the backend.</p>
       <Link to="/orders" className="mt-5 inline-block">

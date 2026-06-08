@@ -44,8 +44,8 @@ export function getStockClass(product) {
   }
 
   if (stockQuantity < 5) {
-    return "text-clay";
+    return "text-gold-600";
   }
 
-  return "text-leaf";
+  return "text-gold-700";
 }

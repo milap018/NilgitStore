@@ -35,7 +35,7 @@ export default function Signup() {
   }
 
   return (
-    <section className="mx-auto max-w-md rounded-md border border-neutral-200 bg-white p-6 shadow-soft">
+    <section className="mx-auto max-w-md rounded-md border border-gold-100 bg-white p-6 shadow-soft">
       <h1 className="text-2xl font-bold">Create your account</h1>
       <p className="mt-2 text-sm text-neutral-600">Signup saves your session in a secure httpOnly cookie.</p>
 
@@ -60,7 +60,7 @@ export default function Signup() {
 
       <p className="mt-4 text-center text-sm text-neutral-600">
         Already have an account?{" "}
-        <Link className="font-semibold text-ink" to="/signin">
+        <Link className="font-semibold text-gold-700" to="/signin">
           Signin
         </Link>
       </p>

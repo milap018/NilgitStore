@@ -262,7 +262,7 @@ export default function Profile() {
   ];
 
   return (
-    <section className="grid gap-6 lg:grid-cols-[290px_minmax(0,1fr)] lg:items-start">
+    <section className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
       <aside className="space-y-4 lg:sticky lg:top-24">
         <div className="overflow-hidden rounded-md border border-gold-100 bg-white shadow-soft">
           <div className="bg-[radial-gradient(circle_at_top_left,rgba(217,154,0,0.18),transparent_44%),linear-gradient(135deg,#fffaf0,#ffffff)] p-5">
@@ -343,17 +343,19 @@ export default function Profile() {
       </aside>
 
       <div className="space-y-5 lg:min-w-0">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-700">{currentTab.eyebrow}</p>
-            <h2 className="mt-2 text-3xl font-bold text-ink">{currentTab.title}</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">{currentTab.description}</p>
+        <section className="overflow-hidden rounded-md border border-gold-100 bg-white shadow-soft">
+          <div className="flex flex-col gap-5 bg-[linear-gradient(135deg,rgba(255,248,225,0.95),#ffffff_70%)] px-6 py-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-700">{currentTab.eyebrow}</p>
+              <h2 className="mt-2 text-3xl font-bold text-ink">{currentTab.title}</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">{currentTab.description}</p>
+            </div>
+            <p className="inline-flex w-fit items-center gap-2 rounded-md border border-gold-200 bg-white px-4 py-2 text-sm font-semibold text-gold-800 shadow-soft">
+              <ShieldCheck size={16} />
+              Changes save on this device
+            </p>
           </div>
-          <p className="inline-flex w-fit items-center gap-2 rounded-md border border-gold-200 bg-white px-4 py-2 text-sm font-semibold text-gold-800 shadow-soft">
-            <ShieldCheck size={16} />
-            Changes save on this device
-          </p>
-        </div>
+        </section>
 
         {activeTab === "details" && (
           <>

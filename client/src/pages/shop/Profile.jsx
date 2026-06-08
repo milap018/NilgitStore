@@ -1,12 +1,16 @@
 import {
+  ChevronRight,
   Heart,
   Home,
   KeyRound,
   LogOut,
+  Mail,
   MapPin,
   PackageCheck,
   Plus,
+  ShieldCheck,
   ShoppingCart,
+  Sparkles,
   Trash2,
   UserRound
 } from "lucide-react";
@@ -41,6 +45,34 @@ const menuGroups = [
   }
 ];
 
+const tabMeta = {
+  details: {
+    eyebrow: "Account dashboard",
+    title: "My details",
+    description: "Keep your personal information ready so checkout, delivery updates, and future account tools feel smooth."
+  },
+  addresses: {
+    eyebrow: "Delivery setup",
+    title: "Manage addresses",
+    description: "Save multiple delivery locations with receiver details, so you can switch between home, office, or gift addresses."
+  },
+  orders: {
+    eyebrow: "Purchase history",
+    title: "Orders",
+    description: "This panel will hold tracking, payment status, and delivery milestones instead of opening a separate full screen."
+  },
+  wishlist: {
+    eyebrow: "Saved picks",
+    title: "Wishlist",
+    description: "See how many favourites you have saved and jump straight back into shopping when you are ready."
+  },
+  cart: {
+    eyebrow: "Shopping bag",
+    title: "Cart",
+    description: "Keep an eye on the number of items in your cart and the current subtotal before checkout."
+  }
+};
+
 const validTabs = menuGroups.flatMap((group) => group.items.map((item) => item.id));
 
 function getInitials(user) {
@@ -73,6 +105,18 @@ function createAddress() {
   };
 }
 
+function countReadyAddresses(addresses) {
+  return addresses.filter(
+    (address) =>
+      address.personName.trim() &&
+      address.mobileNumber.trim() &&
+      address.addressLine.trim() &&
+      address.city.trim() &&
+      address.state.trim() &&
+      address.postalCode.trim()
+  ).length;
+}
+
 export default function Profile() {
   usePageTitle("Profile");
 
@@ -82,6 +126,7 @@ export default function Profile() {
   const { cartTotal, itemCount } = useCart();
   const { wishlistCount } = useWishlist();
   const activeTab = validTabs.includes(searchParams.get("tab")) ? searchParams.get("tab") : "details";
+  const currentTab = tabMeta[activeTab];
   const [profile, setProfile] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -190,24 +235,75 @@ export default function Profile() {
     navigate("/signin");
   }
 
+  const readyAddresses = countReadyAddresses(addresses);
+  const detailHighlights = [
+    {
+      icon: ShieldCheck,
+      label: "Profile status",
+      value: profile.mobileNumber.trim() ? "Ready for checkout" : "Needs mobile number",
+      note: profile.mobileNumber.trim()
+        ? "Order updates can reach you faster."
+        : "Add your phone number for delivery updates."
+    },
+    {
+      icon: MapPin,
+      label: "Saved addresses",
+      value: addresses.length ? `${addresses.length} saved` : "No address yet",
+      note: addresses.length
+        ? `${readyAddresses} address${readyAddresses === 1 ? "" : "es"} complete`
+        : "Your first delivery address can be added here."
+    },
+    {
+      icon: Sparkles,
+      label: "Shopping activity",
+      value: `${wishlistCount} wishlist / ${itemCount} cart`,
+      note: `Cart total ${formatMoney(cartTotal)}`
+    }
+  ];
+
   return (
-    <section className="flex flex-col gap-5 lg:flex-row lg:items-start">
-      <aside className="space-y-4 lg:sticky lg:top-20 lg:w-80 lg:shrink-0">
-        <div className="flex items-center gap-4 rounded-md border border-gold-100 bg-white p-4 shadow-soft">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-gold-300 bg-gold-100 text-xl font-bold text-gold-800">
-            {getInitials(profile)}
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm text-neutral-600">Hello,</p>
-            <h1 className="truncate text-lg font-bold">{profile.name || "Nilgit customer"}</h1>
-            <p className="truncate text-sm text-neutral-500">{profile.email}</p>
+    <section className="grid gap-6 lg:grid-cols-[290px_minmax(0,1fr)] lg:items-start">
+      <aside className="space-y-4 lg:sticky lg:top-24">
+        <div className="overflow-hidden rounded-md border border-gold-100 bg-white shadow-soft">
+          <div className="bg-[radial-gradient(circle_at_top_left,rgba(217,154,0,0.18),transparent_44%),linear-gradient(135deg,#fffaf0,#ffffff)] p-5">
+            <div className="flex items-start gap-4">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-gold-300 bg-white text-2xl font-bold text-gold-800 shadow-soft">
+                {getInitials(profile)}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-neutral-600">Hello,</p>
+                <h1 className="truncate text-2xl font-bold text-ink">{profile.name || "Nilgit customer"}</h1>
+                <div className="mt-2 flex items-center gap-2 text-sm text-neutral-600">
+                  <Mail size={14} className="text-gold-700" />
+                  <span className="truncate">{profile.email}</span>
+                </div>
+                <p className="mt-3 inline-flex rounded-full border border-gold-300 bg-white px-3 py-1 text-xs font-semibold text-gold-800">
+                  {isAdmin ? "Admin account" : "Customer account"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between border-t border-gold-200 pt-4">
+              <div>
+                <p className="text-lg font-bold text-ink">{wishlistCount}</p>
+                <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Saved</p>
+              </div>
+              <div>
+                <p className="text-lg font-bold text-ink">{itemCount}</p>
+                <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Cart</p>
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold text-ink">{addresses.length}</p>
+                <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">Addresses</p>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="overflow-hidden rounded-md border border-gold-100 bg-white shadow-soft">
           {menuGroups.map((group) => (
             <div key={group.title} className="border-b border-gold-100 last:border-b-0">
-              <p className="px-5 py-4 text-xs font-bold uppercase tracking-normal text-neutral-500">{group.title}</p>
+              <p className="px-5 py-4 text-xs font-bold uppercase tracking-[0.2em] text-neutral-500">{group.title}</p>
               <div className="pb-2">
                 {group.items.map((item) => {
                   const Icon = item.icon;
@@ -217,13 +313,17 @@ export default function Profile() {
                     <button
                       key={item.id}
                       type="button"
-                      className={`flex h-12 w-full items-center gap-3 px-5 text-left text-sm font-semibold transition ${
-                        isActive ? "bg-gold-50 text-gold-800" : "text-neutral-700 hover:bg-gold-50/60"
+                      aria-current={isActive ? "page" : undefined}
+                      className={`flex min-h-12 w-full items-center gap-3 border-l-2 py-3 pl-5 pr-4 text-left text-sm font-semibold transition ${
+                        isActive
+                          ? "border-gold-600 bg-gold-50 text-gold-900"
+                          : "border-transparent text-neutral-700 hover:bg-gold-50/70"
                       }`}
                       onClick={() => selectTab(item.id)}
                     >
                       <Icon size={18} className={isActive ? "text-gold-700" : "text-neutral-500"} />
-                      {item.label}
+                      <span className="flex-1">{item.label}</span>
+                      <ChevronRight size={16} className={isActive ? "text-gold-700" : "text-neutral-400"} />
                     </button>
                   );
                 })}
@@ -233,7 +333,7 @@ export default function Profile() {
 
           <button
             type="button"
-            className="flex h-12 w-full items-center gap-3 px-5 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50"
+            className="flex min-h-12 w-full items-center gap-3 px-5 py-3 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50"
             onClick={handleLogout}
           >
             <LogOut size={18} />
@@ -242,155 +342,224 @@ export default function Profile() {
         </div>
       </aside>
 
-      <div className="min-h-[640px] flex-1 rounded-md border border-gold-100 bg-white p-6 shadow-soft lg:min-w-0">
-        {activeTab === "details" && (
-          <div className="max-w-4xl">
-            <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
-              <div>
-                <h2 className="text-2xl font-bold">Personal Information</h2>
-                <p className="mt-1 text-sm text-neutral-600">Manage your name, email, mobile number, and password.</p>
-              </div>
-              <span className="w-fit rounded-full border border-gold-200 bg-gold-50 px-3 py-1 text-xs font-semibold text-gold-800">
-                {isAdmin ? "Admin account" : "Customer account"}
-              </span>
-            </div>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <Input id="profileName" label="Full name" name="name" value={profile.name} onChange={handleProfileChange} />
-              <div>
-                <span className="mb-1 block text-sm font-medium text-neutral-700">Your gender</span>
-                <div className="flex h-11 items-center gap-6 rounded-md border border-gold-200 bg-white px-3">
-                  {["male", "female"].map((gender) => (
-                    <label key={gender} className="flex items-center gap-2 text-sm capitalize text-neutral-700">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={gender}
-                        checked={profile.gender === gender}
-                        onChange={handleProfileChange}
-                      />
-                      {gender}
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 space-y-6">
-              <div>
-                <h3 className="text-lg font-bold">Email Address</h3>
-                <div className="mt-3 max-w-md">
-                  <Input id="profileEmail" label="Email" name="email" type="email" value={profile.email} onChange={handleProfileChange} />
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-bold">Mobile Number</h3>
-                <div className="mt-3 max-w-md">
-                  <Input
-                    id="profileMobile"
-                    label="Mobile number"
-                    name="mobileNumber"
-                    value={profile.mobileNumber}
-                    onChange={handleProfileChange}
-                    placeholder="Enter mobile number"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <form onSubmit={handlePasswordSubmit} className="mt-8 rounded-md border border-gold-100 bg-gold-50/50 p-5">
-              <div className="flex items-center gap-2">
-                <KeyRound className="text-gold-700" size={20} />
-                <h3 className="text-lg font-bold">Change Password</h3>
-              </div>
-              <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                <Input
-                  id="currentPassword"
-                  label="Current password"
-                  name="currentPassword"
-                  type="password"
-                  value={passwordForm.currentPassword}
-                  onChange={handlePasswordChange}
-                />
-                <Input
-                  id="newPassword"
-                  label="New password"
-                  name="newPassword"
-                  type="password"
-                  value={passwordForm.newPassword}
-                  onChange={handlePasswordChange}
-                />
-                <Input
-                  id="confirmPassword"
-                  label="Confirm password"
-                  name="confirmPassword"
-                  type="password"
-                  value={passwordForm.confirmPassword}
-                  onChange={handlePasswordChange}
-                />
-              </div>
-              <div className="mt-4 flex flex-wrap items-center gap-3">
-                <Button type="submit">Save password</Button>
-                {message && <p className="text-sm font-semibold text-gold-700">{message}</p>}
-              </div>
-            </form>
-
-            <div className="mt-8">
-              <h3 className="text-lg font-bold">FAQs</h3>
-              <div className="mt-3 space-y-4 text-sm text-neutral-700">
-                <div>
-                  <p className="font-semibold">What happens when I update my email address or mobile number?</p>
-                  <p className="mt-1">
-                    This frontend saves your account display details locally for now. Backend profile update APIs can be connected later.
-                  </p>
-                </div>
-                <div>
-                  <p className="font-semibold">Can I change my password here?</p>
-                  <p className="mt-1">
-                    The form is ready for the user experience. The actual password update endpoint can be added in the backend next.
-                  </p>
-                </div>
-              </div>
-            </div>
+      <div className="space-y-5 lg:min-w-0">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold-700">{currentTab.eyebrow}</p>
+            <h2 className="mt-2 text-3xl font-bold text-ink">{currentTab.title}</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">{currentTab.description}</p>
           </div>
+          <p className="inline-flex w-fit items-center gap-2 rounded-md border border-gold-200 bg-white px-4 py-2 text-sm font-semibold text-gold-800 shadow-soft">
+            <ShieldCheck size={16} />
+            Changes save on this device
+          </p>
+        </div>
+
+        {activeTab === "details" && (
+          <>
+            <div className="grid gap-4 xl:grid-cols-3">
+              {detailHighlights.map((card) => {
+                const Icon = card.icon;
+
+                return (
+                  <article key={card.label} className="rounded-md border border-gold-100 bg-white p-5 shadow-soft">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">{card.label}</p>
+                        <h3 className="mt-3 text-xl font-bold text-ink">{card.value}</h3>
+                      </div>
+                      <div className="flex h-11 w-11 items-center justify-center rounded-md bg-gold-50 text-gold-800">
+                        <Icon size={20} />
+                      </div>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-neutral-600">{card.note}</p>
+                  </article>
+                );
+              })}
+            </div>
+
+            <section className="rounded-md border border-gold-100 bg-white p-6 shadow-soft">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-ink">Personal information</h3>
+                  <p className="mt-1 text-sm text-neutral-600">Update the basic details you want to use across checkout and account pages.</p>
+                </div>
+                <p className="inline-flex w-fit rounded-full border border-gold-200 bg-gold-50 px-3 py-1 text-xs font-semibold text-gold-800">
+                  Profile basics
+                </p>
+              </div>
+
+              <div className="mt-6 grid gap-5 xl:grid-cols-2">
+                <Input id="profileName" label="Full name" name="name" value={profile.name} onChange={handleProfileChange} />
+
+                <div>
+                  <span className="mb-2 block text-sm font-medium text-neutral-700">Your gender</span>
+                  <div className="flex flex-wrap gap-3">
+                    {["male", "female"].map((gender) => {
+                      const isSelected = profile.gender === gender;
+
+                      return (
+                        <label
+                          key={gender}
+                          className={`inline-flex min-h-11 min-w-32 items-center gap-3 rounded-md border px-4 text-sm font-semibold transition ${
+                            isSelected
+                              ? "border-gold-500 bg-gold-50 text-gold-900 shadow-soft"
+                              : "border-gold-200 bg-white text-neutral-700 hover:border-gold-400"
+                          }`}
+                        >
+                          <input
+                            className="sr-only"
+                            type="radio"
+                            name="gender"
+                            value={gender}
+                            checked={isSelected}
+                            onChange={handleProfileChange}
+                          />
+                          <span className={`h-2.5 w-2.5 rounded-full ${isSelected ? "bg-gold-600" : "bg-neutral-300"}`} />
+                          {gender === "male" ? "Male" : "Female"}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <Input id="profileEmail" label="Email address" name="email" type="email" value={profile.email} onChange={handleProfileChange} />
+                <Input
+                  id="profileMobile"
+                  label="Mobile number"
+                  name="mobileNumber"
+                  value={profile.mobileNumber}
+                  onChange={handleProfileChange}
+                  placeholder="Enter mobile number"
+                />
+              </div>
+            </section>
+
+            <div className="grid gap-5 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+              <section className="rounded-md border border-gold-100 bg-white p-6 shadow-soft">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-md bg-gold-50 text-gold-800">
+                    <KeyRound size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-ink">Change password</h3>
+                    <p className="text-sm text-neutral-600">This form is ready for the backend password API we add next.</p>
+                  </div>
+                </div>
+
+                <form onSubmit={handlePasswordSubmit} className="mt-6">
+                  <div className="grid gap-4 xl:grid-cols-3">
+                    <Input
+                      id="currentPassword"
+                      label="Current password"
+                      name="currentPassword"
+                      type="password"
+                      value={passwordForm.currentPassword}
+                      onChange={handlePasswordChange}
+                    />
+                    <Input
+                      id="newPassword"
+                      label="New password"
+                      name="newPassword"
+                      type="password"
+                      value={passwordForm.newPassword}
+                      onChange={handlePasswordChange}
+                    />
+                    <Input
+                      id="confirmPassword"
+                      label="Confirm password"
+                      name="confirmPassword"
+                      type="password"
+                      value={passwordForm.confirmPassword}
+                      onChange={handlePasswordChange}
+                    />
+                  </div>
+                  <div className="mt-5 flex flex-wrap items-center gap-3">
+                    <Button type="submit">Save password</Button>
+                    {message && <p className="text-sm font-semibold text-gold-700">{message}</p>}
+                  </div>
+                </form>
+              </section>
+
+              <section className="rounded-md border border-gold-100 bg-white p-6 shadow-soft">
+                <h3 className="text-xl font-bold text-ink">Helpful notes</h3>
+                <div className="mt-5 space-y-5 text-sm leading-6 text-neutral-600">
+                  <div className="border-l-2 border-gold-300 pl-4">
+                    <p className="font-semibold text-ink">What happens when I update my email or mobile number?</p>
+                    <p className="mt-1">These profile values are stored locally right now, so the interface feels real before we connect backend profile updates.</p>
+                  </div>
+                  <div className="border-l-2 border-gold-300 pl-4">
+                    <p className="font-semibold text-ink">Why keep this page in panels?</p>
+                    <p className="mt-1">It keeps future sections like returns, saved cards, and tracking inside one professional account dashboard.</p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </>
         )}
 
         {activeTab === "addresses" && (
-          <div>
-            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-              <div>
-                <h2 className="text-2xl font-bold">Manage Addresses</h2>
-                <p className="mt-1 text-sm text-neutral-600">Add multiple delivery addresses with receiver name and mobile number.</p>
-              </div>
-              <Button className="gap-2" onClick={handleAddAddress}>
-                <Plus size={17} />
-                Add address
-              </Button>
+          <>
+            <div className="grid gap-4 xl:grid-cols-3">
+              <article className="rounded-md border border-gold-100 bg-white p-5 shadow-soft">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">Saved addresses</p>
+                <h3 className="mt-3 text-2xl font-bold text-ink">{addresses.length}</h3>
+                <p className="mt-2 text-sm leading-6 text-neutral-600">Keep separate delivery locations for home, office, or gifting.</p>
+              </article>
+              <article className="rounded-md border border-gold-100 bg-white p-5 shadow-soft">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">Ready to use</p>
+                <h3 className="mt-3 text-2xl font-bold text-ink">{readyAddresses}</h3>
+                <p className="mt-2 text-sm leading-6 text-neutral-600">An address counts as ready when every receiver and postal field is filled.</p>
+              </article>
+              <article className="rounded-md border border-gold-100 bg-white p-5 shadow-soft">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">Quick action</p>
+                <div className="mt-4">
+                  <Button className="gap-2" onClick={handleAddAddress}>
+                    <Plus size={17} />
+                    Add address
+                  </Button>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-neutral-600">The top action stays visible, and there is another add button after the address list.</p>
+              </article>
             </div>
 
             {addresses.length === 0 ? (
-              <div className="mt-6 rounded-md border border-gold-100 bg-gold-50/50 p-8 text-center">
-                <Home className="mx-auto text-gold-700" size={30} />
-                <p className="mt-3 font-semibold">No address added yet</p>
-                <p className="mt-1 text-sm text-neutral-600">Create your first delivery address.</p>
-              </div>
+              <section className="rounded-md border border-gold-100 bg-white p-10 text-center shadow-soft">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gold-50 text-gold-800">
+                  <Home size={28} />
+                </div>
+                <h3 className="mt-4 text-xl font-bold text-ink">No address added yet</h3>
+                <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-neutral-600">
+                  Start with your most common delivery location. Once one address is saved, you can keep adding more for work, family, or gifts.
+                </p>
+                <div className="mt-6">
+                  <Button className="gap-2" onClick={handleAddAddress}>
+                    <Plus size={17} />
+                    Add your first address
+                  </Button>
+                </div>
+              </section>
             ) : (
-              <div className="mt-6 space-y-4">
+              <div className="space-y-4">
                 {addresses.map((address, index) => (
-                  <article key={address.id} className="rounded-md border border-gold-100 bg-gold-50/40 p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <h3 className="font-bold">Address {index + 1}</h3>
+                  <section key={address.id} className="rounded-md border border-gold-100 bg-white p-5 shadow-soft">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500">Delivery address {index + 1}</p>
+                        <h3 className="mt-2 text-xl font-bold text-ink">{address.personName.trim() || "Receiver details"}</h3>
+                        <p className="mt-1 text-sm text-neutral-600">Fill every field so this address is ready for checkout.</p>
+                      </div>
                       <button
                         type="button"
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gold-200 text-red-600 transition hover:border-red-300 hover:bg-red-50"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gold-200 text-red-600 transition hover:border-red-300 hover:bg-red-50"
                         onClick={() => handleRemoveAddress(address.id)}
                         aria-label={`Remove address ${index + 1}`}
                       >
                         <Trash2 size={16} />
                       </button>
                     </div>
-                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+
+                    <div className="mt-5 grid gap-4 xl:grid-cols-2">
                       <Input
                         id={`personName-${address.id}`}
                         label="Person name"
@@ -428,11 +597,12 @@ export default function Profile() {
                         onChange={(event) => handleAddressChange(address.id, "postalCode", event.target.value)}
                       />
                     </div>
-                  </article>
+                  </section>
                 ))}
+
                 <button
                   type="button"
-                  className="flex min-h-14 w-full items-center justify-center gap-2 rounded-md border border-dashed border-gold-300 bg-white px-4 py-3 text-sm font-semibold text-gold-800 transition hover:border-gold-500 hover:bg-gold-50 focus:outline-none focus:ring-2 focus:ring-gold-100"
+                  className="flex min-h-14 w-full items-center justify-center gap-2 rounded-md border border-dashed border-gold-300 bg-white px-4 py-3 text-sm font-semibold text-gold-800 shadow-soft transition hover:border-gold-500 hover:bg-gold-50 focus:outline-none focus:ring-2 focus:ring-gold-100"
                   onClick={handleAddAddress}
                 >
                   <Plus size={18} />
@@ -440,46 +610,58 @@ export default function Profile() {
                 </button>
               </div>
             )}
-          </div>
+          </>
         )}
 
         {activeTab === "orders" && (
-          <div>
-            <h2 className="text-2xl font-bold">My Orders</h2>
-            <p className="mt-1 text-sm text-neutral-600">Order history and tracking will stay inside this account panel.</p>
-            <div className="mt-6 rounded-md border border-gold-100 bg-gold-50/50 p-6">
-              <PackageCheck className="text-gold-700" size={32} />
-              <h3 className="mt-3 text-lg font-bold">Order tracking coming next</h3>
-              <p className="mt-2 text-sm text-neutral-600">
-                In future, each order will show payment status, shipping progress, tracking number, and delivery timeline here.
-              </p>
-              <div className="mt-5 grid gap-3 sm:grid-cols-4">
-                {["Order placed", "Packed", "Shipped", "Delivered"].map((step) => (
-                  <div key={step} className="rounded-md border border-gold-100 bg-white p-3 text-sm font-semibold text-neutral-600">
+          <div className="space-y-4">
+            <section className="rounded-md border border-gold-100 bg-white p-6 shadow-soft">
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-gold-50 text-gold-800">
+                  <PackageCheck size={22} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-ink">Order tracking will live here</h3>
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">
+                    We are keeping orders inside the profile panel so this area can grow into a real customer dashboard instead of sending you to a separate page.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                {["Order placed", "Payment confirmed", "Packed", "Tracking next"].map((step) => (
+                  <div key={step} className="rounded-md border border-gold-100 bg-gold-50/50 p-4 text-sm font-semibold text-neutral-700">
                     {step}
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
           </div>
         )}
 
         {activeTab === "wishlist" && (
-          <div>
-            <h2 className="text-2xl font-bold">Wishlist</h2>
-            <p className="mt-1 text-sm text-neutral-600">You have {wishlistCount} saved {wishlistCount === 1 ? "item" : "items"}.</p>
-            <Link to="/wishlist" className="mt-5 inline-block">
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto]">
+            <section className="rounded-md border border-gold-100 bg-white p-6 shadow-soft">
+              <h3 className="text-xl font-bold text-ink">Wishlist summary</h3>
+              <p className="mt-2 text-sm leading-6 text-neutral-600">
+                You currently have {wishlistCount} saved {wishlistCount === 1 ? "item" : "items"} waiting for a second look.
+              </p>
+            </section>
+            <Link to="/wishlist" className="xl:self-start">
               <Button>Open wishlist</Button>
             </Link>
           </div>
         )}
 
         {activeTab === "cart" && (
-          <div>
-            <h2 className="text-2xl font-bold">Cart</h2>
-            <p className="mt-1 text-sm text-neutral-600">You have {itemCount} cart {itemCount === 1 ? "item" : "items"}.</p>
-            <p className="mt-3 text-lg font-bold">{formatMoney(cartTotal)}</p>
-            <Link to="/cart" className="mt-5 inline-block">
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto]">
+            <section className="rounded-md border border-gold-100 bg-white p-6 shadow-soft">
+              <h3 className="text-xl font-bold text-ink">Cart summary</h3>
+              <p className="mt-2 text-sm leading-6 text-neutral-600">
+                You have {itemCount} cart {itemCount === 1 ? "item" : "items"} with a current subtotal of {formatMoney(cartTotal)}.
+              </p>
+            </section>
+            <Link to="/cart" className="xl:self-start">
               <Button>Open cart</Button>
             </Link>
           </div>

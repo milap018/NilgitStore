@@ -3,6 +3,7 @@ import User from "../models/User.js";
 
 export async function protect(req, res, next) {
   try {
+// The JWT lives in an httpOnly cookie, so the server reads it from req.cookies.
     const token = req.cookies.token;
 
     if (!token) {

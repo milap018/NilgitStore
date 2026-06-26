@@ -23,6 +23,7 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use(
+// Only allow trusted local and deployed frontend origins to call the API.
   cors({
     origin(origin, callback) {
       if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
@@ -43,6 +44,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api", async (req, res, next) => {
+// Product listing can fall back to seeded data when Mongo is not configured.
   if (!hasMongoConfig()) {
     if (req.method === "GET" && req.path.startsWith("/products")) {
       req.dbError = new Error("MongoDB is not configured.");
@@ -57,6 +59,7 @@ app.use("/api", async (req, res, next) => {
   }
 
   try {
+// Try to connect before protected API work; this keeps the app honest about DB state.
     await connectDb();
     next();
   } catch (error) {

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Product from "../models/Product.js";
 import { products as fallbackProducts } from "../seed/seedData.js";
 
+// The fallback list is filtered the same way the database list is filtered.
 function getFallbackProducts({ search = "", category = "", subcategory = "" }) {
   const searchText = search.toLowerCase();
 
@@ -38,6 +39,7 @@ function cleanSpecifications(value) {
     .filter((item) => item.name && item.value);
 }
 
+// Normalize request input so the controller works with form fields and JSON bodies the same way.
 function getProductBody(body) {
   return {
     name: body.name,
@@ -60,12 +62,14 @@ function getProductBody(body) {
   };
 }
 
+// GET /products serves either Mongo data or seeded demo data, depending on database availability.
 export async function getProducts(req, res) {
   try {
     const search = req.query.search || "";
     const category = req.query.category || "";
     const subcategory = req.query.subcategory || "";
 
+// When Mongo is unavailable, return seeded demo data instead of failing the UI.
     if (req.dbError) {
       return res.json(getFallbackProducts({ search, category, subcategory }));
     }
@@ -94,6 +98,7 @@ export async function getProducts(req, res) {
   }
 }
 
+// GET /products/:id follows the same fallback idea as the list endpoint.
 export async function getProductById(req, res) {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -110,6 +115,7 @@ export async function getProductById(req, res) {
       return res.json(product);
     }
 
+// This is the normal Mongo path when the database is connected.
     const product = await Product.findById(req.params.id);
 
     if (!product) {

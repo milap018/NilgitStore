@@ -32,6 +32,7 @@ function NotFound() {
 export default function App() {
   return (
     <PageShell>
+      {/* Routes are the page map for the whole app. React Router picks the first matching path. */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />

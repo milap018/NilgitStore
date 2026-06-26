@@ -4,6 +4,7 @@ import { getOriginalPrice, getPrimaryImage, getProductPrice, getStockQuantity } 
 const WishlistContext = createContext(null);
 
 function loadSavedWishlist() {
+// Wishlist persistence follows the same pattern as the cart.
   try {
     const savedWishlist = localStorage.getItem("nilgit-wishlist");
     return savedWishlist ? JSON.parse(savedWishlist) : [];
@@ -36,6 +37,7 @@ function createWishlistItem(product) {
 export function WishlistProvider({ children }) {
   const [wishlistItems, setWishlistItems] = useState(loadSavedWishlist);
 
+// Keep the saved favorites list in sync with React state.
   useEffect(() => {
     localStorage.setItem("nilgit-wishlist", JSON.stringify(wishlistItems));
   }, [wishlistItems]);
@@ -56,6 +58,7 @@ export function WishlistProvider({ children }) {
     setWishlistItems((oldItems) => oldItems.filter((item) => item.product !== productId));
   }, []);
 
+// If the product is already saved, remove it; otherwise add it.
   const toggleWishlist = useCallback(function toggleWishlist(product) {
     setWishlistItems((oldItems) => {
       const exists = oldItems.some((item) => item.product === product._id);

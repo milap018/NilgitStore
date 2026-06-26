@@ -9,7 +9,9 @@ import "./index.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    {/* BrowserRouter gives the app URL-based navigation without full page reloads. */}
     <BrowserRouter>
+      {/* Global providers wrap the app so every page can read auth, cart, and wishlist state. */}
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>

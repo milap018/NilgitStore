@@ -5,6 +5,7 @@ function withTimeout(promise, timeoutMs = 1500) {
   let timeoutId;
 
   const timeoutPromise = new Promise((_, reject) => {
+// If the backend is slow or unavailable, stop waiting and let the UI fall back.
     timeoutId = setTimeout(() => reject(new Error("Request timed out.")), timeoutMs);
   });
 
@@ -16,6 +17,7 @@ export async function getProducts(params = {}) {
     const { data } = await withTimeout(api.get("/products", { params }));
     return data;
   } catch (error) {
+// In learning mode we prefer showing demo products over an empty loading state.
     return getDemoProducts(params);
   }
 }
@@ -25,6 +27,7 @@ export async function getProduct(id) {
     const { data } = await withTimeout(api.get(`/products/${id}`));
     return data;
   } catch (error) {
+// Product detail pages also fall back to demo data when the API cannot answer.
     const product = getDemoProduct(id);
 
     if (product) {

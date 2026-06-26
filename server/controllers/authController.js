@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import { createToken } from "../utils/createToken.js";
 import { setTokenCookie } from "../utils/setTokenCookie.js";
 
+// Never send the password back to the client, even during learning demos.
 function cleanUser(user) {
   return {
     _id: user._id,
@@ -12,6 +13,7 @@ function cleanUser(user) {
   };
 }
 
+// Signup validates input, hashes the password, and creates the first JWT session cookie.
 export async function signup(req, res) {
   try {
     const { name, email, password } = req.body;
@@ -30,6 +32,7 @@ export async function signup(req, res) {
       return res.status(400).json({ message: "Email is already registered." });
     }
 
+// bcrypt transforms the plain password into a hash before it ever reaches MongoDB.
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
@@ -47,6 +50,7 @@ export async function signup(req, res) {
   }
 }
 
+// Signin checks the stored hash, then reuses the same cookie-session flow as signup.
 export async function signin(req, res) {
   try {
     const { email, password } = req.body;
@@ -61,6 +65,7 @@ export async function signin(req, res) {
       return res.status(401).json({ message: "Invalid email or password." });
     }
 
+// Compare the submitted password with the stored hash.
     const passwordMatches = await bcrypt.compare(password, user.password);
 
     if (!passwordMatches) {
@@ -76,6 +81,7 @@ export async function signin(req, res) {
   }
 }
 
+// Logout clears the auth cookie so the browser stops sending the session token.
 export function logout(req, res) {
   res.clearCookie("token");
   res.json({ message: "Logged out successfully." });

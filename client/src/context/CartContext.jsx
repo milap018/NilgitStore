@@ -4,6 +4,7 @@ import { getOriginalPrice, getPrimaryImage, getProductPrice, getStockQuantity } 
 const CartContext = createContext(null);
 
 function loadSavedCart() {
+// localStorage keeps cart items after refresh for this learning app.
   try {
     const savedCart = localStorage.getItem("nilgit-cart");
     return savedCart ? JSON.parse(savedCart) : [];
@@ -15,10 +16,12 @@ function loadSavedCart() {
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState(loadSavedCart);
 
+// Every cart update is mirrored to localStorage so the browser keeps it between sessions.
   useEffect(() => {
     localStorage.setItem("nilgit-cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
+// Keep quantity inside stock limits and reuse the item if it already exists.
   const addToCart = useCallback(function addToCart(product, quantity = 1) {
     setCartItems((oldItems) => {
       const productId = product._id ?? product.product;
@@ -81,6 +84,7 @@ export function CartProvider({ children }) {
     setCartItems([]);
   }, []);
 
+// Totals are derived data, so React can recalculate them from the current cart array.
   const totals = useMemo(() => {
     const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);

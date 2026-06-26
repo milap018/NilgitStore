@@ -7,6 +7,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+// On first app load, ask the backend whether the cookie session is still valid.
   useEffect(() => {
     async function loadSession() {
       try {
@@ -22,18 +23,21 @@ export function AuthProvider({ children }) {
     loadSession();
   }, []);
 
+// Signup returns a user and also sets the cookie session on the backend.
   async function signup(form) {
     const data = await signupUser(form);
     setUser(data.user);
     return data.user;
   }
 
+// Signin works the same way: backend validates credentials, then returns the user.
   async function signin(form) {
     const data = await signinUser(form);
     setUser(data.user);
     return data.user;
   }
 
+// Logging out clears the cookie server-side, then we clear local auth state.
   async function logout() {
     await logoutUser();
     setUser(null);

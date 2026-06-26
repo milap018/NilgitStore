@@ -23,6 +23,7 @@ export default function ProductCard({ product }) {
   const isOutOfStock = stockQuantity === 0;
   const isFavorite = isInWishlist(product._id);
 
+// The card only needs to call the context action; the provider updates global cart state.
   function handleAddToCart() {
     addToCart(product);
     setAdded(true);
@@ -45,6 +46,7 @@ export default function ProductCard({ product }) {
           <Link to={`/products/${product._id}`}>
             <img className="h-56 w-full object-cover" src={getPrimaryImage(product)} alt={product.name} />
           </Link>
+// The wishlist icon lives on the image so users can save items fast while browsing.
           <button
             type="button"
             className={`absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full border bg-white/95 shadow-soft transition hover:scale-105 ${

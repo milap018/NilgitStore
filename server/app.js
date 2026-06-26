@@ -2,7 +2,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import { connectDb } from "./config/db.js";
+import { connectDb, hasMongoConfig } from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
@@ -43,6 +43,19 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api", async (req, res, next) => {
+  if (!hasMongoConfig()) {
+    if (req.method === "GET" && req.path.startsWith("/products")) {
+      req.dbError = new Error("MongoDB is not configured.");
+      next();
+      return;
+    }
+
+    res.status(503).json({
+      message: "Database is not connected. Please configure MONGO_URI."
+    });
+    return;
+  }
+
   try {
     await connectDb();
     next();

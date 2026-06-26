@@ -1,12 +1,23 @@
 import mongoose from "mongoose";
 
+export function hasMongoConfig() {
+  const uri = process.env.MONGO_URI || "";
+
+  if (!uri) {
+    return false;
+  }
+
+  const placeholderMarkers = ["username:password", "your_", "change_this_to"];
+  return !placeholderMarkers.some((marker) => uri.includes(marker));
+}
+
 export async function connectDb() {
   if (mongoose.connection.readyState === 1) {
     return mongoose.connection;
   }
 
-  if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI is missing.");
+  if (!hasMongoConfig()) {
+    throw new Error("MONGO_URI is missing or still using placeholder values.");
   }
 
   try {

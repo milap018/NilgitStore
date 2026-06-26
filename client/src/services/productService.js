@@ -1,25 +1,31 @@
 import api from "./api.js";
 import { getDemoProduct, getDemoProducts } from "../utils/demoProducts.js";
 
+function withTimeout(promise, timeoutMs = 1500) {
+  let timeoutId;
+
+  const timeoutPromise = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error("Request timed out.")), timeoutMs);
+  });
+
+  return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timeoutId));
+}
+
 export async function getProducts(params = {}) {
   try {
-    const { data } = await api.get("/products", { params });
+    const { data } = await withTimeout(api.get("/products", { params }));
     return data;
   } catch (error) {
-    if (import.meta.env.PROD) {
-      return getDemoProducts(params);
-    }
-
-    throw error;
+    return getDemoProducts(params);
   }
 }
 
 export async function getProduct(id) {
   try {
-    const { data } = await api.get(`/products/${id}`);
+    const { data } = await withTimeout(api.get(`/products/${id}`));
     return data;
   } catch (error) {
-    const product = import.meta.env.PROD ? getDemoProduct(id) : null;
+    const product = getDemoProduct(id);
 
     if (product) {
       return product;
